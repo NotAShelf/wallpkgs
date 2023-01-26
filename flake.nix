@@ -12,7 +12,9 @@
     genSystems = lib.genAttrs [
       # Add more systems if they are supported
       "aarch64-linux"
+      "aarch64-darwin"
       "x86_64-linux"
+      "x86_64-darwin"
     ];
     pkgsFor = nixpkgs.legacyPackages;
 
@@ -26,7 +28,7 @@
   in {
     overlays.default = _: prev: rec {
       wallpkgs = prev.callPackage ./nix/default.nix {
-        #stdenv = prev.gcc12Stdenv;
+        stdenv = prev.stdenvNoCC;
         version = props.version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
       };
     };
