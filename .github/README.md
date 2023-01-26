@@ -19,7 +19,7 @@ or add to your flake inputs
 
 ```nix 
 inputs = {
-...
+# ...
 wallpkgs = "github:notashelf/wallpkgs";
 };
 ```
