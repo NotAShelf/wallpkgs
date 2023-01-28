@@ -33,7 +33,7 @@ wallpkgs = "github:notashelf/wallpkgs";
 ## Using the wallpapers 
 
 > The `wallpkgs` package moves included wallpapers to `$out/share/wallpapers` by 
-default. You may reference those files at `/nix/var/nix/profiles/per-user/$USERNAME/profile/share/wallpapers`
+default. You may reference those files at `$NIX_USER_PROFILE_DIR/share/wallpapers`
 if they are installed via `nix profile install` (multi-user Nix), or reference the 
 package path if installed via flake inputs with `${pkgs.wallpkgs}` inside NixOS 
 configurations. 
@@ -50,14 +50,14 @@ features and give credit when it is due.
 > I am nowhere near the best when it comes to Nix. This was meant to be a project for 
 me to explore with as well as a wallpaper collection for me and others to use, and thus 
 please do feel free to refactor/rewrite/add/remove any nix code as you see fit. PRs will ba 
-reviewed with utmost interest. See [todo](todo) for my current list of to-do items.
+reviewed with utmost interest. See [todo](../TODO) for my current list of to-do items.
 
 ## 📜 License issues 
 
 > I will do my best to avoid infringing individual rights as much as possible. But given 
 the nature of how I (and many others in the Linux & OSS community) find wallpapers, 
 the authors may sometimes be ambigious. If you find any work here tha belongs to you, which 
-you are share with the community with credits given, please [contact me]() and I will respond 
+you are share with the community with credits given, please [contact me](issues) and I will respond 
 as soon as possible. 
 
 > Contributors are kindly requested to specify source for wallpapers created by individual artists 
