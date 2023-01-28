@@ -1,6 +1,6 @@
 {
   description = ''
-    My collection of various wallpapers, packed with a Nix Flake
+    A collection of various wallpapers, packed with a Nix Flake
     for easier organization and curation.
   '';
 
