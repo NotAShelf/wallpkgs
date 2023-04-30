@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  style ? "",
+  style ? null,
+  version,
   ...
 }:
 stdenv.mkDerivation {
   pname = "wallpkgs";
-  version = "0.0.1";
+  inherit version;
 
   strictDeps = true;
 
@@ -14,18 +15,23 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     runHook preConfigure
-    mkdir -p $out/share/wallpapers/${style}
+    mkdir -p $out/share/wallpapers
     runHook postConfigure
   '';
 
-  installPhase = ''
+  installPhase = let
+    cpIfFull =
+      if (style == null)
+      then "cp -r ./* $out/share/wallpapers"
+      else "cp -r ./${style}* $out/share/wallpapers";
+  in ''
     runHook preInstall
-    cp -r ./* $out/share/wallpapers/${style}
+    ${cpIfFull}
     runHook postInstall
   '';
 
   meta = {
-    description = "Test";
+    description = "A collection of Wallpapers for Nix users";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = ["notashelf"];
