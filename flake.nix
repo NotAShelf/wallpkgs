@@ -17,6 +17,7 @@
       "x86_64-darwin"
     ];
     pkgsFor = nixpkgs.legacyPackages;
+    version = props.version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
 
     props = builtins.fromJSON (builtins.readFile ./nix/props.json);
 
@@ -29,7 +30,11 @@
     overlays.default = _: prev: rec {
       wallpkgs = prev.callPackage ./nix/default.nix {
         stdenv = prev.stdenvNoCC;
-        version = props.version + "+date=" + (mkDate (self.lastModifiedDate or "19700101")) + "_" + (self.shortRev or "dirty");
+        inherit version;
+      };
+
+      catppuccin = prev.callPackage ./nix/default.nix {
+        style = "catppuccin";
       };
     };
     packages = genSystems (system:

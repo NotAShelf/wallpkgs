@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  style ? "",
   ...
 }:
 stdenv.mkDerivation {
@@ -13,20 +14,20 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     runHook preConfigure
-    mkdir -p $out/share/wallpapers
+    mkdir -p $out/share/wallpapers/${style}
     runHook postConfigure
   '';
 
   installPhase = ''
     runHook preInstall
-    cp -r ./* $out/share/wallpapers
+    cp -r ./* $out/share/wallpapers/${style}
     runHook postInstall
   '';
 
   meta = {
     description = "Test";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = ["notashelf"];
   };
 }
