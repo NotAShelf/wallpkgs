@@ -1,91 +1,106 @@
 # 📒 Wallpkgs
 
-> A potentially curated collection of wallpapers with various color palettes. Packaged
-> with nix for ease of installation and referencing.
+A potentially curated collection of various wallpapers, packed for easier
+packaging, sharing and consuming.
 
-## Building
+## Installing
 
-> Wallpkgs exposes a default package which you can build without extra args.
+There are several methods of getting wallpapers from Wallpkgs. The most simple
+method would be to add it as a flake input, and pick a collection of wallpapers
+that you may be interested in. Current list of collections include:
 
-```console
-# Build default (full) package
-$ nix build .
-```
+- Catppuccin
+- Cities
+- Monochrome
+- Nature
+- Space
+- Unorganized
 
-```console
-# Or build only the catppuccin package
-$ nix build .#catppuccin
-```
+You may choose to install a specific category exposed as a package to reduce
+your store size, or get all packages if storage is not a concern.
 
-## Install
+Wallpkgs can be installed on non-NixOS with `nix profile install`. Do note that
+this will copy the packages to your nix profile and not nix store.
 
-> Wallpkgs can be installed on non-NixOS with nix profile install. Do note that this
-> will copy the packages to your nix profile and not nix store.
-
-```console
+```bash
 $ nix profile install github:notashelf/wallpkgs
 ```
 
-> On NixOS, it's recommended that you add wallpkgs to your flake inputs.
+### On NixOS/Home-Manager (Flakes)
+
+The recommended and by far the easiest method of installing Wallpkgs is to add
+it as a flake input, then consume exposed packages per your needs. Add Wallpkgs
+to your `flake.nix` as follows:
 
 ```nix
 inputs = {
-    wallpkgs = "github:notashelf/wallpkgs";
+    wallpkgs = {
+        url = "github:notashelf/wallpkgs";
+        inputs.nixpkgs.follows = "nixpkgs";
+        # «https://github.com/nix-systems/nix-systems»
+        # inputs.systems.follows = "systems"; # if using nix-systems
+    };
 };
 ```
+
+This will allow you to reference any collection as a package as exposed by the
+flake, for example, `inputs.wallpkgs.packages.${pkgs.system}.catppuccin` in any
+given Nix file as long as `inputs` is in the argset. A more complete example
+would be:
+
+```nix
+# configuration.nix
+{inputs, pkgs, ...}: {
+    environment = {
+        etc."wallpapers".source = inputs.wallpkgs.packages.${pkgs.system}.catppuccin;
+    };
+}
+```
+
+Which would link `/etc/wallpapers` to the store path of your selected package
+for a persistent path - which you can then tell your wallpaper manager to look
+into, or use for scripting.
+
+You may also use the package
+(`inputs.wallpkgs.packages.${pkgs.system}.catppuccin`) by interpolating strings,
+e.g., while writing configuration files with home-manager. How you approach this
+is your choice, and this is left as an exercise to the reader.
 
 ## Using the wallpapers
 
 > The `wallpkgs` package moves included wallpapers to `$out/share/wallpapers` by
-> default. You may reference those files at `$NIX_USER_PROFILE_DIR/share/wallpapers/${style}`
-> if they are installed via `nix profile install` (multi-user Nix), or reference the
-> package path if installed via flake inputs with `${pkgs.wallpkgs}` inside NixOS
+> default. You may reference those files at
+> `$NIX_USER_PROFILE_DIR/share/wallpapers/${style}` if they are installed via
+> `nix profile install` (multi-user Nix), or reference the package path if
+> installed via flake inputs with `${pkgs.wallpkgs}` inside NixOS
 > configurations.
-
-You can also reference the package path with ${pkgs.wallpkgs}, optionally providing a style:
-
-```nix
-{inputs, ...}:
-let
-    wallpkgs = inputs.wallpkgs.packages.${pkgs.system}.catppuccin;
-in {
-    home.packages = [
-        wallpkgs
-    ];
-}
-```
-
-In this example, wallpapers will be installed to `$out/share/wallpapers/catppuccin` and only the catppuccin wallpapers will be included. Using the `default` package will use the full wallpapers directory and make it available at `$out/share/wallpapers`.
-
-This can be used to choose wallpaper sets from the inputs packages.
-You may also try using the overlay, but using packages is recommended.
 
 ## Contributing
 
-**New Wallpapers**
+My vision for Wallpkgs is for it to be a community collection of Wallpapers. As
+such, new wallpapers are always welcome, whatever the theme.
 
-> My vision for Wallpkgs is for it to be a community collection of Wallpapers. As such,
-> new wallpapers are always welcome, whatever the theme. For the sake of organization and
-> avoiding potential infringement, please do separate wallpapers based off of their distinctive
-> features and give credit when it is due.
+For the sake of organization and avoiding potential infringement, please do
+separate wallpapers based off of their distinctive features and **do give**
+credit when it is due.
 
-**Nix**
-
-> I am nowhere near the best when it comes to Nix. This was meant to be a project for
-> me to explore with as well as a wallpaper collection for me and others to use, and thus
-> please do feel free to refactor/rewrite/add/remove any nix code as you see fit. PRs will ba
-> reviewed with utmost interest. See [todo](../TODO) for my current list of to-do items.
+I unfortunately do not have a mechanism for per-image credits yet. Please
+contact me in private if you would like your wallpaper to be removed.
 
 ## 📜 License issues
 
-> I will do my best to avoid infringing individual rights as much as possible. But given
-> the nature of how I (and many others in the Linux & OSS community) find wallpapers,
-> the authors may sometimes be ambigious. If you find any work here tha belongs to you, which
-> you are willing to share with the community with credits given, please [contact me](../../issues) and I will respond
-> as soon as possible.
+I will do my best to avoid infringing individual rights as much as possible. But
+given the nature of how I (and many others in the Linux/FOSS community) find
+wallpapers, the authors may sometimes be ambiguous.
 
-> Contributors are kindly requested to **specify source for wallpapers created by individual artists**.
-> and published over the internet. If you cannot find the source, please leave a note for the potential artist finding you, and ask them to contact you about the copyright.
-> Thanks for your understanding!
+If you find any work here that belongs to you, which you are willing to share
+with the community with credits given, please [contact me](../../issues) and I
+will respond as soon as possible. If you find any work here that belongs to you
+that you are _not_ willing to share, then contact me via the same method to
+request removal. Just please keep in mind that aggressive comments will be
+returned in kind.
 
----
+As such, contributors are kindly requested to **specify source for wallpapers
+created by individual artists** and published over the internet. If you cannot
+find the source, please leave a note for the potential artist finding you, and
+ask them to contact you about the copyright. Thanks for your understanding!
