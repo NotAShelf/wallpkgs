@@ -4,69 +4,40 @@
     for easier organization and curation.
   '';
 
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    systems.url = "github:nix-systems/default";
+  };
+
   outputs = {
     self,
     nixpkgs,
+    systems,
   }: let
     inherit (nixpkgs) lib;
-    genSystems = lib.genAttrs [
-      # Add more systems if they are supported
-      "aarch64-linux"
-      "aarch64-darwin"
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
+    genSystems = lib.genAttrs (import systems);
     pkgsFor = nixpkgs.legacyPackages;
-
-    version = props.version + "_" + (self.shortRev or "dirty");
-
-    props = builtins.fromJSON (builtins.readFile ./nix/props.json);
-    /*
-    mkDate = longDate: (lib.concatStringsSep "-" [
-      (builtins.substring 0 4 longDate)
-      (builtins.substring 4 2 longDate)
-      (builtins.substring 6 2 longDate)
-    ]);
-    */
+    version = self.shortRev;
   in {
     overlays.default = _: prev: let
       stdenv = prev.stdenvNoCC;
+      callWallpaper = style:
+        prev.callPackage ./nix/default.nix {
+          inherit style version stdenv;
+        };
     in rec {
+      # Complete repository: larger and more varied collection.
+      # Naturally, means longer build times.
       full = wallpkgs;
-      wallpkgs = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = null;
-      };
+      wallpkgs = callWallpaper null;
 
-      catppuccin = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = "catppuccin";
-      };
-
-      cities = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = "cities";
-      };
-
-      monochrome = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = "monochrome";
-      };
-
-      nature = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = "nature";
-      };
-
-      space = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = "space";
-      };
-
-      unorganized = prev.callPackage ./nix/default.nix {
-        inherit version stdenv;
-        style = "unorganized";
-      };
+      # Call individual collections by category.
+      catppuccin = callWallpaper "catppuccin";
+      cities = callWallpaper "cities";
+      monochrome = callWallpaper "monochrome";
+      nature = callWallpaper "nature";
+      space = callWallpaper "space";
+      unorganized = callWallpaper "unorganized";
     };
 
     packages = genSystems (system:
