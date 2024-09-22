@@ -1,7 +1,6 @@
 {
   description = ''
-    A collection of various wallpapers, packed with a Nix Flake
-    for easier organization and curation.
+    Pure and reproducible, and possibly curated collection of wallpapers.
   '';
 
   inputs = {
@@ -15,15 +14,15 @@
     systems,
   }: let
     inherit (nixpkgs) lib;
+
     genSystems = lib.genAttrs (import systems);
     pkgsFor = nixpkgs.legacyPackages;
-    version = self.shortRev;
+    version = self.shortRev or "dirty";
   in {
     overlays.default = _: prev: let
-      stdenv = prev.stdenvNoCC;
       callWallpaper = style:
-        prev.callPackage ./nix/default.nix {
-          inherit style version stdenv;
+        prev.callPackage ./nix/builder.nix {
+          inherit style version;
         };
     in rec {
       # Complete repository: larger and more varied collection.
@@ -40,12 +39,14 @@
       unorganized = callWallpaper "unorganized";
     };
 
+    # Generate package outputsfrom available overlay packages.
     packages = genSystems (system:
       (self.overlays.default null pkgsFor.${system})
       // {
         default = self.packages.${system}.wallpkgs;
       });
 
+    # I do not accept anything else.
     formatter = genSystems (system: pkgsFor.${system}.alejandra);
   };
 }
