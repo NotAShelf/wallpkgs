@@ -17,13 +17,19 @@ that you may be interested in. Current list of collections include:
 - Unorganized
 
 You may choose to install a specific category exposed as a package to reduce
-your store size, or get all packages if storage is not a concern.
+your store size, or get all packages if storage space is not a concern. If the
+list here is outdated, refer to `nix flake show github:notashelf/wallpkgs` for a
+list of package outputs.
 
-Wallpkgs can be installed on non-NixOS with `nix profile install`. Do note that
-this will copy the packages to your nix profile and not nix store.
+> [!NOTE]
+> Available wallpaper packages can be installed on non-NixOS with
+> `nix profile install`. This will make your wallpapers available under
+> /etc/profiles/per-user/$USER while using a multi-user system.
+
+Example:
 
 ```bash
-$ nix profile install github:notashelf/wallpkgs
+$ nix profile install github:notashelf/wallpkgs#monochrome
 ```
 
 ### On NixOS/Home-Manager (Flakes)
