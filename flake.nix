@@ -38,6 +38,8 @@
       nature = callWallpaper "nature";
       space = callWallpaper "space";
       unorganized = callWallpaper "unorganized";
+      tokyo_night = callWallpaper "tokyo_night";
+      gruvbox = callWallpaper "gruvbox";
     };
 
     # Generate package outputsfrom available overlay packages.
