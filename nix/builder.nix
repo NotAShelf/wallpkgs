@@ -5,7 +5,10 @@
   version,
   ...
 }: let
-  pname = if style != "" then "wallpkgs-${style}" else "wallpkgs";
+  pname =
+    if style != null
+    then "wallpkgs-${style}"
+    else "wallpkgs";
   pathsToCopy =
     if (style == null)
     then "./*"

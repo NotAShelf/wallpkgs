@@ -28,7 +28,7 @@
       # Complete repository: larger and more varied collection.
       # Naturally, means longer build times.
       full = wallpkgs;
-      wallpkgs = callWallpaper "";
+      wallpkgs = callWallpaper null;
 
       # Call individual collections by category.
       oxocarbon = callWallpaper "catppuccin";
