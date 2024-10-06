@@ -5,7 +5,12 @@
   version,
   ...
 }: let
-  pname = "wallpkgs-${style}";
+  # null is used to represent a complete package.
+  pname =
+    if (style == null)
+    then "wallpapers"
+    else "wallpapers-${style}";
+
   pathsToCopy =
     if (style == null)
     then "./*"
