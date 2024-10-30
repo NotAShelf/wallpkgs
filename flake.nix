@@ -40,6 +40,7 @@
       unorganized = callWallpaper "unorganized";
       tokyo_night = callWallpaper "tokyo_night";
       gruvbox = callWallpaper "gruvbox";
+      rose_pine = callWallpaper "rose_pine";
     };
 
     # Generate package outputsfrom available overlay packages.
