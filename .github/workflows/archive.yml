@@ -32,6 +32,10 @@ jobs:
             fi
           done
 
+      - name: Copy assets
+        run: |
+          cp .github/assets/* ./archives
+
       - name: Upload to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
