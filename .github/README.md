@@ -51,8 +51,8 @@ inputs = {
 
 This will allow you to reference any collection as a package as exposed by the
 flake, for example, `inputs.wallpkgs.packages.${pkgs.system}.catppuccin` in any
-given Nix file as long as `inputs` is in the argset. A more complete example
-would be:
+given Nix file as long as `inputs` is in the argument set. A more complete
+example would be:
 
 ```nix
 # configuration.nix
@@ -74,12 +74,11 @@ is your choice, and this is left as an exercise to the reader.
 
 ## Using the wallpapers
 
-> The `wallpkgs` package moves included wallpapers to `$out/share/wallpapers` by
-> default. You may reference those files at
-> `$NIX_USER_PROFILE_DIR/share/wallpapers/${style}` if they are installed via
-> `nix profile install` (multi-user Nix), or reference the package path if
-> installed via flake inputs with `${pkgs.wallpkgs}` inside NixOS
-> configurations.
+The `wallpkgs` package moves included wallpapers to `$out/share/wallpapers` by
+default. You may reference those files at
+`$NIX_USER_PROFILE_DIR/share/wallpapers/${style}` if they are installed via
+`nix profile install` (multi-user Nix), or reference the package path if
+installed via flake inputs with `${pkgs.wallpkgs}` inside NixOS configurations.
 
 ## Contributing
 
@@ -100,11 +99,11 @@ given the nature of how I (and many others in the Linux/FOSS community) find
 wallpapers, the authors may sometimes be ambiguous.
 
 If you find any work here that belongs to you, which you are willing to share
-with the community with credits given, please [contact me](../../issues) and I
-will respond as soon as possible. If you find any work here that belongs to you
-that you are _not_ willing to share, then contact me via the same method to
-request removal. Just please keep in mind that aggressive comments will be
-returned in kind.
+with the community with credits given, please
+[let me know](https://github.com/NotAShelf/wallpkgs/issues) and I will respond
+as soon as possible. If you find any work here that belongs to you that you are
+_not_ willing to share, then contact me via the same method to request removal.
+Just please keep in mind that aggressive comments will be returned in kind.
 
 As such, contributors are kindly requested to **specify source for wallpapers
 created by individual artists** and published over the internet. If you cannot
