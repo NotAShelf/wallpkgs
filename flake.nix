@@ -9,9 +9,9 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     systems,
+    ...
   }: let
     inherit (nixpkgs) lib;
 
@@ -92,6 +92,11 @@
         "unorganized-09" = ["unorganized"];
         "unorganized-10" = ["unorganized"];
         "unorganized-11" = ["unorganized"];
+        "nord-01" = ["nord"];
+        "nord-02" = ["nord"];
+        "nord-03" = ["nord"];
+        "nord-04" = ["nord"];
+        "nord-05" = ["nord"];
       };
 
     # I do not accept anything else.
