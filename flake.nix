@@ -99,6 +99,24 @@
         "nord-05" = ["nord"];
       };
 
+    packages = genSystems (_:
+      builtins.listToAttrs (map (n: {
+          name = n;
+          value = throw "As of #15, wallpkgs no longer uses packages for wallpapers instead preferring to use the `wallpapers` flake output. Sorry for any inconvenience.";
+        }) [
+          "catppuccin"
+          "oxocarbon"
+          "unorganized"
+          "tokyo_night"
+          "space"
+          "gruvbox"
+          "rose_pine"
+          "nature"
+          "cities"
+          "monochrome"
+          "nord"
+        ]));
+
     # I do not accept anything else.
     formatter = genSystems (system: pkgsFor.${system}.alejandra);
   };
