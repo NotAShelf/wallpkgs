@@ -41,7 +41,17 @@
     packages = genSystems (_:
       builtins.listToAttrs (map (n: {
           name = n;
-          value = throw "As of #15, wallpkgs no longer uses packages for wallpapers instead preferring to use the `wallpapers` flake output. Sorry for any inconvenience.";
+          value = throw ''
+            As of #15, wallpkgs no longer uses packages.$${system} for wallpapers, as wallpapers
+            should never have been system-dependant. All wallpapers have been moved to a top-level
+            'wallpapers' attribute under the repository.
+
+            To use your own wallpapers, you must conform to the new filename format.
+
+            For example, 'inputs.wallpkgs.packages.wallpapers.catppuccin-01' now refers to what used
+            to reside in /share/wallpapers/catppuccin/01.png. To suppress this error, get wallpapers
+            from the packages output.
+          '';
         }) [
           "catppuccin"
           "oxocarbon"

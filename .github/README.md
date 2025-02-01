@@ -1,84 +1,13 @@
-# 📒 Wallpkgs
+# Wallpkgs
+
+Somewhat curated collection of various wallpapers that I have came across, or
+were contributed by other users hoping to allow for a centralized wallpapers
+repository.
 
 A potentially curated collection of various wallpapers, packed for easier
 packaging, sharing and consuming.
 
 ## Installing
-
-There are several methods of getting wallpapers from Wallpkgs. The most simple
-method would be to add it as a flake input, and pick a collection of wallpapers
-that you may be interested in. Current list of collections include:
-
-- Catppuccin
-- Cities
-- Monochrome
-- Nature
-- Space
-- Unorganized
-
-You may choose to install a specific category exposed as a package to reduce
-your store size, or get all packages if storage space is not a concern. If the
-list here is outdated, refer to `nix flake show github:notashelf/wallpkgs` for a
-list of package outputs.
-
-> [!NOTE]
-> Available wallpaper packages can be installed on non-NixOS with
-> `nix profile install`. This will make your wallpapers available under
-> /etc/profiles/per-user/$USER while using a multi-user system.
-
-Example:
-
-```bash
-$ nix profile install github:notashelf/wallpkgs#monochrome
-```
-
-### On NixOS/Home-Manager (Flakes)
-
-The recommended and by far the easiest method of installing Wallpkgs is to add
-it as a flake input, then consume exposed packages per your needs. Add Wallpkgs
-to your `flake.nix` as follows:
-
-```nix
-inputs = {
-    wallpkgs = {
-        url = "github:notashelf/wallpkgs";
-        inputs.nixpkgs.follows = "nixpkgs";
-        # «https://github.com/nix-systems/nix-systems»
-        # inputs.systems.follows = "systems"; # if using nix-systems
-    };
-};
-```
-
-This will allow you to reference any collection as a package as exposed by the
-flake, for example, `inputs.wallpkgs.packages.${pkgs.system}.catppuccin` in any
-given Nix file as long as `inputs` is in the argument set. A more complete
-example would be:
-
-```nix
-# configuration.nix
-{inputs, pkgs, ...}: {
-    environment = {
-        etc."wallpapers".source = inputs.wallpkgs.packages.${pkgs.system}.catppuccin;
-    };
-}
-```
-
-Which would link `/etc/wallpapers` to the store path of your selected package
-for a persistent path - which you can then tell your wallpaper manager to look
-into, or use for scripting.
-
-You may also use the package
-(`inputs.wallpkgs.packages.${pkgs.system}.catppuccin`) by interpolating strings,
-e.g., while writing configuration files with home-manager. How you approach this
-is your choice, and this is left as an exercise to the reader.
-
-## Using the wallpapers
-
-The `wallpkgs` package moves included wallpapers to `$out/share/wallpapers` by
-default. You may reference those files at
-`$NIX_USER_PROFILE_DIR/share/wallpapers/${style}` if they are installed via
-`nix profile install` (multi-user Nix), or reference the package path if
-installed via flake inputs with `${pkgs.wallpkgs}` inside NixOS configurations.
 
 ## Contributing
 
@@ -92,7 +21,7 @@ credit when it is due.
 I unfortunately do not have a mechanism for per-image credits yet. Please
 contact me in private if you would like your wallpaper to be removed.
 
-## 📜 License issues
+## 📜 License
 
 I will do my best to avoid infringing individual rights as much as possible. But
 given the nature of how I (and many others in the Linux/FOSS community) find
