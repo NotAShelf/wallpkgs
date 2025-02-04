@@ -4,10 +4,30 @@ Somewhat curated collection of various wallpapers that I have came across, or
 were contributed by other users hoping to allow for a centralized wallpapers
 repository.
 
-A potentially curated collection of various wallpapers, packed for easier
-packaging, sharing and consuming.
+## Usage
 
-## Installing
+To use a wallpaper in wallpkgs, you add the flake to your flake inputs.
+You then may use each of the wallpapers however you please.
+
+```nix
+{
+    inputs = {
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+        wallpkgs.url = "github:NotAShelf/wallpkgs";
+    };
+
+    outputs = { nixpkgs, wallpkgs, ... }: let
+        genSystems = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux"];
+        pkgsFor = system: import nixpkgs {inherit system;};
+    in {
+        overlays.default = _final: prev: {
+            catppuccinWalls = prev.callPackage ./wallpapers.nix {
+                wallpapers = builtins.filter (wall: builtins.elem "catppuccin" wall.tags) (builtins.attrValues wallpkgs.wallpapers)
+            };
+        };
+    }
+}
+```
 
 ## Contributing
 
