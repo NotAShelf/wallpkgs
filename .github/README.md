@@ -16,16 +16,13 @@ You then may use each of the wallpapers however you please.
         wallpkgs.url = "github:NotAShelf/wallpkgs";
     };
 
-    outputs = { nixpkgs, wallpkgs, ... }: let
-        genSystems = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux"];
-        pkgsFor = system: import nixpkgs {inherit system;};
-    in {
+    outputs = { wallpkgs, ... }: {
         overlays.default = _final: prev: {
             catppuccinWalls = prev.callPackage ./wallpapers.nix {
-                wallpapers = builtins.filter (wall: builtins.elem "catppuccin" wall.tags) (builtins.attrValues wallpkgs.wallpapers)
+                wallpapers = builtins.filter (wall: builtins.elem "catppuccin" wall.tags) (builtins.attrValues wallpkgs.wallpapers);
             };
         };
-    }
+    };
 }
 ```
 
