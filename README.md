@@ -13,7 +13,7 @@ may use each of the wallpapers however you please.
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    wallpkgs.url = "github:NotAShelf/wallpkgs";
+    wallpkgs.url = "github:NotAShelf/wallpkgs"; # no need to follow nixpkgs
   };
 
   outputs = {wallpkgs, ...}: {
@@ -44,7 +44,7 @@ I will do my best to avoid infringing individual rights as much as possible. But
 given the nature of how I (and many others in the Linux/FOSS community) find
 wallpapers, the authors may sometimes be ambiguous.
 
-If you find any work here that belongs to you, which you are willing to share
+If you find _any_ work here that belongs to you, which you are willing to share
 with the community with credits given, please
 [let me know](https://github.com/NotAShelf/wallpkgs/issues) and I will respond
 as soon as possible. If you find any work here that belongs to you that you are
@@ -58,4 +58,10 @@ ask them to contact you about the copyright. Thanks for your understanding!
 
 ## Credits
 
-Thanks to @yunfachi for originally creating the `wallpapers` implementation.
+Special thanks to every and single wallpaper creator, whom I may or may not have
+been able to credit. Please let me know if you are one of those people. There is
+nothing I would like more than to properly associate you with your work.
+
+In addition, I extend my thanks to [@yunfachi](https://github.com/yunfachi) for
+the initial implementation of `toWallpkgs` found in the
+[library](./lib/default.nix)
