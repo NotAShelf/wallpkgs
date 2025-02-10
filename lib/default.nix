@@ -49,7 +49,7 @@ let
     fileExts = extensions;
   in
     builtins.listToAttrs (map (n: let
-        filesByExtension = builtins.filter builtins.pathExists (map (ext: ./${path}/${n}.${ext}) fileExts);
+        filesByExtension = builtins.filter builtins.pathExists (map (ext: path + /${n}.${ext}) fileExts);
         file =
           if filesByExtension == []
           then builtins.throw "Either ${n} is not a file or it does not have the ${builtins.concatStringsSep ", " fileExts} extensions."
@@ -64,7 +64,7 @@ let
       })
       (map (n: builtins.head (splitString "." n)) (
         builtins.attrNames (
-          filterAttrs (n: _: n != "README.md") (builtins.readDir ./wallpapers)
+          filterAttrs (n: _: n != "README.md") (builtins.readDir path)
         )
       )));
 in {
