@@ -55,3 +55,7 @@ As such, contributors are kindly requested to **specify source for wallpapers
 created by individual artists** and published over the internet. If you cannot
 find the source, please leave a note for the potential artist finding you, and
 ask them to contact you about the copyright. Thanks for your understanding!
+
+## Credits
+
+Thanks to @yunfachi for originally creating the `wallpapers` implementation.
