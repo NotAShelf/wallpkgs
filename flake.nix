@@ -3,7 +3,7 @@
     Pure and reproducible, and possibly curated collection of wallpapers.
   '';
 
-  outputs = let
+  outputs = _: let
     lib = import ./lib;
 
     systems = ["x86_64-linux" "aarch64-linux"];
