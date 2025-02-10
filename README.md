@@ -6,23 +6,23 @@ repository.
 
 ## Usage
 
-To use a wallpaper in wallpkgs, you add the flake to your flake inputs.
-You then may use each of the wallpapers however you please.
+To use a wallpaper in wallpkgs, you add the flake to your flake inputs. You then
+may use each of the wallpapers however you please.
 
 ```nix
 {
-    inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-        wallpkgs.url = "github:NotAShelf/wallpkgs";
-    };
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    wallpkgs.url = "github:NotAShelf/wallpkgs";
+  };
 
-    outputs = { wallpkgs, ... }: {
-        overlays.default = _final: prev: {
-            catppuccinWalls = prev.callPackage ./wallpapers.nix {
-                wallpapers = builtins.filter (wall: builtins.elem "catppuccin" wall.tags) (builtins.attrValues wallpkgs.wallpapers);
-            };
-        };
+  outputs = {wallpkgs, ...}: {
+    overlays.default = _final: prev: {
+      catppuccinWalls = prev.callPackage ./wallpapers.nix {
+        wallpapers = builtins.filter (wall: builtins.elem "catppuccin" wall.tags) (builtins.attrValues wallpkgs.wallpapers);
+      };
     };
+  };
 }
 ```
 
