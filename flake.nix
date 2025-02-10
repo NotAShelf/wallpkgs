@@ -3,44 +3,17 @@
     Pure and reproducible, and possibly curated collection of wallpapers.
   '';
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    systems.url = "github:nix-systems/default";
-  };
+  outputs = let
+    lib = import ./lib;
 
-  outputs = {
-    nixpkgs,
-    systems,
-    ...
-  }: let
-    inherit (nixpkgs) lib;
-
+    systems = ["x86_64-linux" "aarch64-linux"];
     genSystems = lib.genAttrs (import systems);
-    pkgsFor = nixpkgs.legacyPackages;
   in {
-    wallpapers = let
-      fileExts = ["png" "jpg" "jpeg" "gif"];
-    in
-      builtins.listToAttrs (map (n: let
-          findFile = builtins.filter builtins.pathExists (map (ext: ./wallpapers/${n}.${ext}) fileExts);
-          file =
-            if findFile == []
-            then builtins.throw "Either ${n} isn't a file or it doesn't have the ${builtins.concatStringsSep ", " (lib.init fileExts)} or ${lib.last fileExts} extensions."
-            else builtins.head findFile;
-        in {
-          name = n;
-          value = {
-            path = file;
-            tags = lib.splitString "-" n;
-            hash = builtins.hashFile "sha256" file;
-          };
-        })
-        (map (n: builtins.head (lib.splitString "." n)) (
-          builtins.attrNames (
-            lib.filterAttrs (n: _: n != "README.md") (builtins.readDir ./wallpapers)
-          )
-        )));
+    # Construct the wallpapers output for wallpkgs from a directory and a list of
+    # extensions allow.
+    wallpapers = lib.toWallpkgs ./wallpapers ["png" "jpg" "jpeg" "gif"];
 
+    # For backwards compatibility. This should re removed in the future.
     packages = genSystems (_:
       builtins.listToAttrs (map (n: {
           name = n;
@@ -68,8 +41,5 @@
           "monochrome"
           "nord"
         ]));
-
-    # I do not accept anything else.
-    formatter = genSystems (system: pkgsFor.${system}.alejandra);
   };
 }
