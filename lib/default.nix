@@ -41,32 +41,50 @@ let
         value = f name;
       })
       names);
+  # Yoinked from nixpkgs
+  hasSuffix = suffix: content: let
+    lenContent = builtins.stringLength content;
+    lenSuffix = builtins.stringLength suffix;
+  in (
+    lenContent >= lenSuffix && builtins.substring (lenContent - lenSuffix) lenContent content == suffix
+  );
 
   # TODO: This needs to be extensible, possibly in order to allow additional directories.
   # In theory, we should only need to handle path*s* instead of a path, and search multiple
   # paths by extension instead of just once, right?
   toWallpkgs = path: extensions: let
-    fileExts = extensions;
-  in
-    builtins.listToAttrs (map (n: let
-        filesByExtension = builtins.filter builtins.pathExists (map (ext: path + /${n}.${ext}) fileExts);
-        file =
-          if filesByExtension == []
-          then builtins.throw "Either ${n} is not a file or it does not have the ${builtins.concatStringsSep ", " fileExts} extensions."
-          else builtins.head filesByExtension;
-      in {
-        name = n;
-        value = {
-          path = file;
-          tags = splitString "-" n;
-          hash = builtins.hashFile "md5" file; # in theory, md5 is the fastest option because it produces a 128-bit hash instead of >= 160
-        };
-      })
-      (map (n: builtins.head (splitString "." n)) (
-        builtins.attrNames (
-          filterAttrs (n: _: n != "README.md") (builtins.readDir path)
+    hasValidExtension = file: builtins.foldl' (acc: elem: (hasSuffix elem "${file}") || acc) false extensions;
+
+    fetchPath = path:
+      filterAttrs (n: t: t == "directory" || (t == "regular" && hasValidExtension n)) (
+        builtins.readDir path
+      );
+
+    getFiles = path:
+      builtins.listToAttrs (
+        builtins.attrValues (
+          builtins.mapAttrs (
+            n: v:
+              if v == "directory"
+              then {
+                name = n;
+                value = getFiles "${path}/${n}";
+              }
+              else let
+                name = builtins.head (splitString "." n);
+              in {
+                inherit name;
+                value = {
+                  path = "${path}/${n}";
+                  tags = splitString "-" name;
+                  hash = builtins.hashFile "md5" "${path}/${n}"; # in theory, md5 is the fastest option because it produces a 128-bit hash instead of >= 160
+                };
+              }
+          ) (fetchPath path)
         )
-      )));
+      );
+  in
+    getFiles path;
 in {
   # Partial re-implementations of functions from Nixpkgs.
   # They may not work as intended, as the implementation is *completely* different. If this is
