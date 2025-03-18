@@ -49,6 +49,12 @@ let
     lenContent >= lenSuffix && builtins.substring (lenContent - lenSuffix) lenContent content == suffix
   );
 
+  concatMapAttrs = f: attrs: builtins.foldl' (it: ac: it // ac) {} (
+    builtins.attrValues (
+      builtins.mapAttrs f attrs
+    )
+  );
+
   # TODO: This needs to be extensible, possibly in order to allow additional directories.
   # In theory, we should only need to handle path*s* instead of a path, and search multiple
   # paths by extension instead of just once, right?
@@ -61,28 +67,23 @@ let
       );
 
     getFiles = path:
-      builtins.listToAttrs (
-        builtins.attrValues (
-          builtins.mapAttrs (
+          concatMapAttrs (
             n: v:
               if v == "directory"
               then {
-                name = n;
-                value = getFiles "${path}/${n}";
+                ${n} = getFiles "${path}/${n}";
               }
               else let
                 name = builtins.head (splitString "." n);
               in {
-                inherit name;
-                value = {
+                ${name} = {
                   path = "${path}/${n}";
                   tags = splitString "-" name;
-                  hash = builtins.hashFile "md5" "${path}/${n}"; # in theory, md5 is the fastest option because it produces a 128-bit hash instead of >= 160
+                  # in theory, md5 is the fastest option because it produces a 128-bit hash instead of >= 160
+                  hash = builtins.hashFile "md5" "${path}/${n}";
                 };
               }
-          ) (fetchPath path)
-        )
-      );
+          ) (fetchPath path);
   in
     getFiles path;
 in {
