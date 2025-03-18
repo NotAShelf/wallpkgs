@@ -62,6 +62,9 @@ Special thanks to every and single wallpaper creator, whom I may or may not have
 been able to credit. Please let me know if you are one of those people. There is
 nothing I would like more than to properly associate you with your work.
 
+I thank the people over at https://github.com/aynp/dracula-wallpapers for the
+Dracula theme wallpapers!
+
 In addition, I extend my thanks to [@yunfachi](https://github.com/yunfachi) for
 the initial implementation of `toWallpkgs` found in the
 [library](./lib/default.nix)
