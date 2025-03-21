@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> We do **not** want to accept new wallpapers for the time being as the flake
+> is now eating up __800MB__ of space in the /nix/store per new commit. We
+> will start accepting new wallpapers again once we are able to debloat this
+> repository.
+
 # Wallpkgs
 
 Somewhat curated collection of various wallpapers that I have came across, or
