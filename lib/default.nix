@@ -41,6 +41,7 @@ let
         value = f name;
       })
       names);
+
   # Yoinked from nixpkgs
   hasSuffix = suffix: content: let
     lenContent = builtins.stringLength content;
@@ -49,11 +50,12 @@ let
     lenContent >= lenSuffix && builtins.substring (lenContent - lenSuffix) lenContent content == suffix
   );
 
-  concatMapAttrs = f: attrs: builtins.foldl' (it: ac: it // ac) {} (
-    builtins.attrValues (
-      builtins.mapAttrs f attrs
-    )
-  );
+  concatMapAttrs = f: attrs:
+    builtins.foldl' (it: ac: it // ac) {} (
+      builtins.attrValues (
+        builtins.mapAttrs f attrs
+      )
+    );
 
   # TODO: This needs to be extensible, possibly in order to allow additional directories.
   # In theory, we should only need to handle path*s* instead of a path, and search multiple
@@ -67,23 +69,23 @@ let
       );
 
     getFiles = path:
-          concatMapAttrs (
-            n: v:
-              if v == "directory"
-              then {
-                ${n} = getFiles "${path}/${n}";
-              }
-              else let
-                name = builtins.head (splitString "." n);
-              in {
-                ${name} = {
-                  path = "${path}/${n}";
-                  tags = splitString "-" name;
-                  # in theory, md5 is the fastest option because it produces a 128-bit hash instead of >= 160
-                  hash = builtins.hashFile "md5" "${path}/${n}";
-                };
-              }
-          ) (fetchPath path);
+      concatMapAttrs (
+        n: v:
+          if v == "directory"
+          then {
+            ${n} = getFiles "${path}/${n}";
+          }
+          else let
+            name = builtins.head (splitString "." n);
+          in {
+            ${name} = {
+              path = "${path}/${n}";
+              tags = splitString "-" name;
+              # in theory, md5 is the fastest option because it produces a 128-bit hash instead of >= 160
+              hash = builtins.hashFile "md5" "${path}/${n}";
+            };
+          }
+      ) (fetchPath path);
   in
     getFiles path;
 in {

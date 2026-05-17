@@ -1,44 +1,34 @@
 # Wallpkgs
 
-Somewhat curated collection of various wallpapers that I have came across, or
-were contributed by other users hoping to allow for a centralized wallpapers
-repository.
+Somewhat curated collection of various wallpapers that I have come across during
+my time on Linux, or those that were contributed by other users hoping to allow
+for a centralized wallpapers repository.
 
 ## Usage
 
-To use a wallpaper in wallpkgs, you add the flake to your flake inputs. You then
-may use each of the wallpapers however you please.
+To use a wallpaper in Wallpkgs, you add the flake to your flake inputs. Crazy, I
+know. You may then use each of the wallpapers however you please. This is
+generally done by getting the image you want from the repository's store path.
 
 ```nix
 {
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    wallpkgs.url = "github:NotAShelf/wallpkgs"; # no need to follow nixpkgs
-  };
-
-  outputs = {wallpkgs, ...}: {
-    overlays.default = _final: prev: {
-      catppuccinWalls = prev.callPackage ./wallpapers.nix {
-        wallpapers = builtins.filter (wall: builtins.elem "catppuccin" wall.tags) (builtins.attrValues wallpkgs.wallpapers);
-      };
-    };
-  };
+  # Wallpkgs does not depend on Nixpkgs! There is no need to add something like
+  # 'inputs.nixpkgs.follows' since there is no Nixpkgs input :)
+  inputs.wallpkgs.url = "github:NotAShelf/wallpkgs";
 }
 ```
 
 ## Contributing
 
 My vision for Wallpkgs is for it to be a community collection of Wallpapers. As
-such, new wallpapers are always welcome, whatever the theme.
-
-For the sake of organization and avoiding potential infringement, please do
-separate wallpapers based off of their distinctive features and **do give**
-credit when it is due.
+such, new wallpapers are always welcome, whatever the theme. For the sake of
+organization and avoiding potential infringement, please do separate wallpapers
+based off of their distinctive features and **do give** credit when it is due.
 
 I unfortunately do not have a mechanism for per-image credits yet. Please
 contact me in private if you would like your wallpaper to be removed.
 
-## 📜 License
+## License
 
 I will do my best to avoid infringing individual rights as much as possible. But
 given the nature of how I (and many others in the Linux/FOSS community) find
@@ -62,7 +52,7 @@ Special thanks to every and single wallpaper creator, whom I may or may not have
 been able to credit. Please let me know if you are one of those people. There is
 nothing I would like more than to properly associate you with your work.
 
-I thank the people over at https://github.com/aynp/dracula-wallpapers for the
+I thank the people over at <https://github.com/aynp/dracula-wallpapers> for the
 Dracula theme wallpapers!
 
 In addition, I extend my thanks to [@yunfachi](https://github.com/yunfachi) for
